@@ -72,8 +72,8 @@ fun TipTimeLayout() {
 
         var calcular by remember { mutableStateOf("") }
         val calcuporc2 = calcular.toDoubleOrNull() ?: 0.0
-
-        val tip = calculateTip(amount,calcuporc2)
+         var roundUp by remember { mutableStateOf(false) }
+        val tip = calculateTip(amount,calcuporc2,roundUp)
 
 
     Column(
@@ -108,6 +108,11 @@ fun TipTimeLayout() {
                     .padding(bottom = 32.dp)
                     .fillMaxWidth()
             )
+          RoundTheTipRow(
+            roundUp = roundUp,
+            onRoundUpChanged = { roundUp = it },
+            modifier = Modifier.padding(bottom = 32.dp)
+        )
 
             Text(
                 text = stringResource(R.string.tip_amount, tip),
@@ -117,9 +122,11 @@ fun TipTimeLayout() {
         Spacer(modifier = Modifier.height(150.dp))
     }
 }
-private fun calculateTip(amount: Double,calcuporc2: Double): String {
-    val tip = calcuporc2 / 100 * amount
-
+private fun calculateTip(amount: Double,calcuporc2: Double, roundUp: Boolean): String {
+    var tip = calcuporc2 / 100 * amount
+    if (roundUp){
+        tip = kotlin.math.ceil(tip)
+    }
     return NumberFormat.getCurrencyInstance().format(tip)
 }
 
@@ -147,7 +154,7 @@ fun EditNumberFieldDos(
         value = value,
         onValueChange = onValueChange,
         singleLine = true,
-        label = { Text(stringResource(R.string.porcentaje_del_meseo)) },
+        label = { Text(stringResource(R.string.bill_amount)) },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         modifier = modifier
     )
