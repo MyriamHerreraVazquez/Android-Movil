@@ -69,9 +69,14 @@ class MainActivity : ComponentActivity() {
 fun TipTimeLayout() {
         var amountInput by remember { mutableStateOf("") }
         val amount = amountInput.toDoubleOrNull() ?: 0.0
-        val tip = calculateTip(amount)
 
-        Column(
+        var calcular by remember { mutableStateOf("") }
+        val calcuporc2 = calcular.toDoubleOrNull() ?: 0.0
+
+        val tip = calculateTip(amount,calcuporc2)
+
+
+    Column(
         modifier = Modifier.padding(40.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -96,6 +101,14 @@ fun TipTimeLayout() {
                     .padding(bottom = 16.dp)
                     .align(alignment = Alignment.Start)
             )
+            EditNumberFieldDos(
+                value = calcular,
+                onValueChange = { calcular = it },
+                modifier = Modifier
+                    .padding(bottom = 32.dp)
+                    .fillMaxWidth()
+            )
+
             Text(
                 text = stringResource(R.string.tip_amount, tip),
                 style = MaterialTheme.typography.displaySmall
@@ -104,8 +117,9 @@ fun TipTimeLayout() {
         Spacer(modifier = Modifier.height(150.dp))
     }
 }
-private fun calculateTip(amount: Double, tipPercent: Double = 15.0): String {
-    val tip = tipPercent / 100 * amount
+private fun calculateTip(amount: Double,calcuporc2: Double): String {
+    val tip = calcuporc2 / 100 * amount
+
     return NumberFormat.getCurrencyInstance().format(tip)
 }
 
@@ -123,7 +137,45 @@ fun TipTimeLayoutPreview() {
     }
 }
 
+@Composable
+fun EditNumberFieldDos(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        singleLine = true,
+        label = { Text(stringResource(R.string.porcentaje_del_meseo)) },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        modifier = modifier
+    )
+}
+@Composable
+fun RoundTheTipRow(
+    roundUp: Boolean,
+    onRoundUpChanged: (Boolean) -> Unit,
+    modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .size(48.dp),
+        verticalAlignment = Alignment.CenterVertically
 
+    )
+    {
+        Text(text = stringResource(R.string.round_up_tip))
+    }
+    Switch(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentWidth(Alignment.End),
+        checked = roundUp,
+        onCheckedChange = onRoundUpChanged,
+    )
+
+}
 @Composable
 fun EditNumberField(
     value: String,
