@@ -32,7 +32,6 @@ object LocalAccountsDataProvider {
             lastName = R.string.account_1_last_name,
             email = R.string.account_1_email,
             avatar = R.drawable.avatar_10
-
         )
 
     private val allUserContactAccounts = listOf(
@@ -45,7 +44,7 @@ object LocalAccountsDataProvider {
         ),
         Account(
             id = 5L,
-            firstName= R.string.account_5_first_name,
+            firstName = R.string.account_5_first_name,
             lastName = R.string.account_5_last_name,
             email = R.string.account_5_email,
             avatar = R.drawable.avatar_3
